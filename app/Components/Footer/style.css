@@ -1,0 +1,17 @@
+footer {
+    height: 50px;
+    clear: both;
+    font-size: 14px;
+    background: #fff;
+    position: relative;
+    z-index: 1;
+    color: rgba(0,0,0,.65);
+    box-shadow: 0 1000px 0 1000px #fff;
+    padding: 0 40px;
+}
+
+footer span {
+    line-height: 50px;
+    float: right;
+    margin-right: 10px;
+}

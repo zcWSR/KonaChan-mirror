@@ -1,0 +1,19 @@
+.search-bar {
+  margin-bottom: 20px;
+}
+.search-item-count {
+  position: absolute;
+  right: 16px;
+}
+
+.line-limit-length {
+  float: left;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+}
+
+.search-btn {
+  margin-right: 5px;
+}

@@ -1,0 +1,14 @@
+.images-wrapper {
+    margin: 20px 0;
+    padding: 0 20px;
+}
+
+.loading {
+    text-align: center;
+}
+
+.loading .loading-content {
+    margin-left: 10px;
+    line-height: 36px;
+    font-size: 17px;
+}
