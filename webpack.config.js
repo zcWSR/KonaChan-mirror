@@ -5,15 +5,15 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = {
   entry: './app/main.js',
   output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, 'dev'),
+    filename: 'bundle.js',
   },
   devtool: 'source-map',
   module: {
     rules: [{
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      use: ['babel-loader']
+      loader: 'babel-loader'
     },
       {
         test: /\.css$/,
@@ -25,16 +25,5 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin('style.css'),
-    new webpack.DefinePlugin({
-      BUILD_TIME: JSON.stringify(new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString()),
-      'process.env': {
-            NODE_ENV: JSON.stringify('development')
-        }
-    })
-  ],
-  resolve: {
-    alias: {
-      'Utils/Http': '/app/Utils/Http' 
-    }
-  }
+  ]
 }

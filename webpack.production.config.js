@@ -3,10 +3,14 @@ const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
-  entry: './app/main.js',
+  entry: {
+    index: './app/main.js',
+    vendor: ['react', 'react-dom', 'rxjs/Rx']
+  },
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    //chunkFilename: "vendor.[chunkHash:8].js",
   },
   module: {
     rules: [{
@@ -20,23 +24,33 @@ module.exports = {
           use: 'css-loader'
         })
       }
-    ],
+    ]
   },
   plugins: [
-    new ExtractTextPlugin('style.css'),
+    new webpack.optimize.UglifyJsPlugin({
+      output: {
+        comments: false, // remove all comments
+      },
+      compress: {
+        warnings: false 
+      }
+    }),
     new webpack.DefinePlugin({
-      BUILD_TIME: JSON.stringify(new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString())
-    })
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+        names: ['vendor'], //manifest：不再重复打包vendor.js影响速度
+        minChunks: Infinity,
+        filename: 'vendor.js' 
+    }),
+    new ExtractTextPlugin('style.css')
   ],
-  resolve: {
-    alias: {
-      'Utils/Http': '/app/Utils/Http' 
-    }
-  },
+  // externals: 从外部引用，不放到打包内容中
+  // externals: {
+  //   'react': 'React',
+  //   'react-dom': 'ReactDOM'
+  // } 
 
-  externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM',
-    'jquery': '$'
-  }
 }
