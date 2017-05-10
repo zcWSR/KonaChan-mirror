@@ -1,6 +1,6 @@
 import * as Rx from 'rxjs/Rx'
 //export const host = 'http://localhost:2333/konachan';
-export const host = 'http://konachan.zcwsr.com';
+export const host = 'http://konachan-api.zcwsr.com';
 
 export class JSONP {
     // 获取当前时间戳
@@ -42,10 +42,6 @@ export class JSONP {
         // 函数名称
         var name;
 
-        if (!data) {
-
-        }
-        
         // 拼装url
         url = url + (url.indexOf("?") === -1 ? "?" : "&") + this.parseData(data);
         
@@ -63,7 +59,7 @@ export class JSONP {
             // 处理?被encode的情况
             url = url.replace("callback=%3F", "callback="+name);
         }
-        
+
         // 创建一个script元素
         var script = document.createElement("script");
         script.type = "text/javascript";
@@ -72,7 +68,6 @@ export class JSONP {
         // 设置id，为了后面可以删除这个元素
         script.id = "id_" + name;
 
-        script.async = true;
 
         script.onerror = ev => {
             error(ev);
@@ -101,7 +96,12 @@ export class JSONP {
     static observable(url, data) {
         return Rx.Observable.create(observer => {
             this.getJSON(url, data, 
-                json => observer.next(json),
+                json => {
+                    if (json.code === 200) 
+                        observer.next(json.result);
+                    else 
+                        observer.error(json.error);
+                },
                 error => observer.error(error.toString())
             )
         })

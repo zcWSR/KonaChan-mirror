@@ -116,7 +116,7 @@ export class SimpleImgCard extends React.Component {
         return (
             <Popover title={this.popoverTitle} content={this.popoverContent}>
                 <Card className="img-card enter-stage" bodyStyle={{ padding: 0 }}>
-                    <a href={`http://konachan.net/post/show?md5=${imgInfo.md5}`} target="_blank">
+                    <a href={`http://konachan.${imgInfo.rating == 's' ? 'net': 'com'}/post/show?md5=${imgInfo.md5}`} target="_blank">
                         <Image 
                             url={imgInfo.preview_url}
                             HighAspectRadio={imgInfo.preview_height / imgInfo.preview_width}

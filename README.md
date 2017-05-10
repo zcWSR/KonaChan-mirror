@@ -10,14 +10,23 @@ __还请多多支持konachan原站点，人家开放接口已经很良心了!__
 
 ## API
 ### HOST: konachan-api.zcwsr.com
+
 支持jsonP
 
-类别 | 接口 | 返回参数 | 传入参数 | 描述
+返回json格式：
+``` json
+{
+    "code": "[number]状态码",
+    "result":["{post}结果集"]
+}
+```
+
+类别 | 接口 | 结果集返回参数 | 传入参数 | 描述
 --- | --- | --- | --- | ---
-TAG | /tag/[:tag] | 见[konachan.com/tag.json](http://konachan.com/tag.json) | 无 | 不传tag则获取全部
-POST | /post | 见[konachan.com/tag.json](http://konachan.com/post.json) | tags | 要搜索的tags，用逗号分割
+TAG | /tag | 见[konachan.com/tag.json](http://konachan.com/tag.json) | name | tag关键字，不传tag则获取全部
+POST | /post | 见[konachan.com/post.json](http://konachan.com/post.json) | tags | 要搜索的tags，用'+'分割，如需要内容不包括R18，添加'rating:safe'的tag
 | | | | page | 页数，从第一页开始，不传默认返回第一页
-| | | | safe | 返回的图片是否包括R-18，false为是
+
 
  ## 技术栈
  后台：express做的jsonp代理

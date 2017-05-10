@@ -24,8 +24,9 @@ export class SearchBar extends React.Component {
         // })
         this.setState({
             keyword: value
+        }, () => {
+            this.searchObservable.next(value);
         });
-        this.searchObservable.next(value);
     }
 
     onGetResult(value) {
@@ -45,7 +46,10 @@ export class SearchBar extends React.Component {
                     this.setState({
                         loading: true
                     });
-                    return JSONP.observable(`${host}/tag/${keyword}`, {callback: 'callback'});
+                    return JSONP.observable(`${host}/tag`,
+                     {name: keyword,
+                      callback: 'tag_callback'}
+                    );
                 })
                 .map(tagList => {
                     tagList.sort((a, b) => b.count - a.count)
@@ -60,7 +64,6 @@ export class SearchBar extends React.Component {
                 })
             },
             error: error => {
-                console.log(error);
                 this.setState({
                     dataSource: this.searchError(),
                     loading: false,
@@ -90,7 +93,7 @@ export class SearchBar extends React.Component {
     }
 
     searchError() {
-        return [<Option key='0' value='null'>
+        return [<Option key='0' value=''>
             <a rel="noopener noreferrer">ERROR</a>
         </Option>];
     }
@@ -98,7 +101,7 @@ export class SearchBar extends React.Component {
     render() {
         const placeholder = this.props.placeholder || 'input';
         const defaultValue = this.props.defaultValue || null;
-        const { dataSource } = this.state;
+        let { dataSource } = this.state;
         const suffix = this.state.loading ? <Spin size="small" /> : <Icon className="search-btn" type="search" onClick={() => this.onGetResult(this.state.keyword)} />;
 
         return (
@@ -106,7 +109,7 @@ export class SearchBar extends React.Component {
                 <AutoComplete
                     size="large"
                     style={{ width: '100%' }}
-                    dataSource={dataSource}
+                    dataSource={this.state.dataSource}
                     onSelect={value => this.onGetResult(value)}
                     onSearch={value => this.onSearch(value)}
                     placeholder={placeholder}

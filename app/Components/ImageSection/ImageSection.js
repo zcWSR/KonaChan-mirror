@@ -44,9 +44,10 @@ export class ImageSection extends React.Component {
         super();
         this.state = {
             tag: '',
+            safe: false,
             page: 1,
             loading: false,
-             col_0_imgs: [],
+            col_0_imgs: [],
             col_1_imgs: [],
             col_2_imgs: [],
             col_3_imgs: [],
@@ -94,11 +95,12 @@ export class ImageSection extends React.Component {
                         loading: 1
                     });
                     return JSONP.observable(`${host}/post`, 
-                        {tags: value.tag,
+                        {tags: `${this.state.safe ? 'rating:safe+' : ''}${value.tag}`,
                          page: value.page, 
                          callback: 'callback'}
                     );
-                });
+                })
+                .retry();
 
         this.imgListSubscriber = this.imgListObservable.subscribe({
             next: imgList => {
@@ -118,21 +120,41 @@ export class ImageSection extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        let tag = nextProps.tag;
-        console.log(`nextTag: ${tag}`);
-        if (tag != this.state.tag) {
+        let {tag, safe} = nextProps;
+
+        if (tag != this.props.tag) {
+            console.log(`nextTag: ${tag}`);
+            if (tag != this.state.tag) {
+                this.setState({
+                    tag: tag,
+                    page: 1,
+                    safe: safe,
+                    col_0_imgs: [],
+                    col_1_imgs: [],
+                    col_2_imgs: [],
+                    col_3_imgs: [],
+                    colHeight: [0, 0, 0, 0]
+                },
+                () => {
+                    this.imgListObservable.next({tag: this.state.tag, page: this.state.page});
+                });
+            }
+        }
+        if (safe != this.props.safe) {
+            console.log(`save mode: ${safe ? 'on' : 'off'}`);
             this.setState({
-                tag: tag,
-                page: 1,
-                col_0_imgs: [],
-                col_1_imgs: [],
-                col_2_imgs: [],
-                col_3_imgs: [],
-                colHeight: [0, 0, 0, 0]
-            },
-            () => {
-                this.imgListObservable.next({tag: this.state.tag, page: this.state.page});
-            });
+                    tag: tag,
+                    page: 1,
+                    safe: safe,
+                    col_0_imgs: [],
+                    col_1_imgs: [],
+                    col_2_imgs: [],
+                    col_3_imgs: [],
+                    colHeight: [0, 0, 0, 0]
+                },
+                () => {
+                    this.imgListObservable.next({tag: this.state.tag, page: this.state.page});
+                });
         }
     }
 
