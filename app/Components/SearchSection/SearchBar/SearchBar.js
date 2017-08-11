@@ -41,7 +41,7 @@ export class SearchBar extends React.Component {
                 .map(keyword => keyword.replace(/(^\s+)|(\s+$)/g,''))
                 .map(keyword => keyword.toLowerCase())
                 .filter(value => value !== '')
-                .distinct()
+                .distinctUntilChanged()
                 .switchMap(keyword => {
                     this.setState({
                         loading: true
