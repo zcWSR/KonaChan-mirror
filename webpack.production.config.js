@@ -1,5 +1,6 @@
-const path = require('path')
-const webpack = require('webpack')
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js',
+    filename: 'bundle.[hash].js',
     //chunkFilename: "vendor.[chunkHash:8].js",
   },
   module: {
@@ -28,12 +29,8 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
-      output: {
-        comments: false, // remove all comments
-      },
-      compress: {
-        warnings: false 
-      }
+      comments: false,
+      warnings: false
     }),
     new webpack.DefinePlugin({
       'process.env': {
@@ -43,9 +40,12 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
         names: ['vendor'], //manifest：不再重复打包vendor.js影响速度
         minChunks: Infinity,
-        filename: 'vendor.js' 
+        filename: '[name].[hash].js' 
     }),
-    new ExtractTextPlugin('style.css')
+    new ExtractTextPlugin('style.[hash].css'),
+    new HtmlWebpackPlugin({
+      template: './index.html'
+    })
   ],
   // externals: 从外部引用，不放到打包内容中
   // externals: {

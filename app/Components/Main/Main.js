@@ -40,7 +40,6 @@ export class Main extends React.Component{
                     </Col>
                 </Row>
             </div>
-            
         )
     }
 

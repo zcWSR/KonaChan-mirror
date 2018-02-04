@@ -31,7 +31,9 @@ export class Loading extends React.Component {
                             (<div className="loading">
                                 <Button type="primary" onClick={() => this.onReload()}>出现错误，滚动或点击重试</Button>
                             </div>):
-                null
+                <div className="loading">
+                    <Button type="primary" onClick={() => this.onReload()}>加载</Button>
+                </div>
                 
             }
             </Row>

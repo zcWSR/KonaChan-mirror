@@ -7,13 +7,6 @@ import './style.css'
 
 export class Root extends React.Component {
     render() {
-        // return (
-        //     <div className="page-wrapper">
-        //         <SimpleHeader title="KonaChan" subTitle="mirror" />
-        //         <Main />
-                
-        //     </div>
-        // );
         return (
             <Layout>
                 <SimpleHeader title="KonaChan" subTitle="mirror" />
