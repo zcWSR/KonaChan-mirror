@@ -84,14 +84,32 @@ export class SimpleImgCard extends React.Component {
         // }
         this.popoverTitle = <p>ID: { imgInfo.id }</p>
         this.popoverContent = (
-            <ul className="popover-content">
-                <li key="0">tags: <TagList tagString={imgInfo.tags} /></li>
-                <li key="1">created at: { new Date(imgInfo.created_at).toLocaleDateString() }</li>
-                <li key="2">author: { imgInfo.author}</li>
-                <li key="3">file size: {(imgInfo.file_size/1024/1024).toFixed(2)}MB</li>
-                <li key="4">jpeg file size: {imgInfo.jpeg_file_size != 0 ? (imgInfo.jpeg_file_size/1024/1024).toFixed(2) + 'MB' : 'unknow'}</li>
-                <li key="5">source: <a href={imgInfo.source} target="_blank">{imgInfo.source}</a></li>
-            </ul>
+            <div className="popover-content">
+                <div className="item" key="0">
+                    <span className="label">tags: </span>
+                    <span className="content"><TagList tagString={imgInfo.tags} /></span>
+                </div>
+                <div className="item" key="1">
+                    <span className="label">created at: </span>
+                    <span className="content">{ new Date(imgInfo.created_at).toLocaleDateString() }</span>
+                </div>
+                <div className="item" key="2">
+                    <span className="label">author: </span>
+                    <span className="content">{ imgInfo.author}</span>
+                </div>
+                <div className="item" key="3">
+                    <span className="label">file size: </span>
+                    <span className="content">{(imgInfo.file_size/1024/1024).toFixed(2)}MB</span>
+                </div>
+                <div className="item" key="4">
+                    <span className="label">jpeg file size: </span>
+                    <span className="content">{imgInfo.jpeg_file_size != 0 ? (imgInfo.jpeg_file_size/1024/1024).toFixed(2) + 'MB' : 'unknow'}</span>
+                </div>
+                <div className="item" key="5">
+                    <span className="label">source: </span>
+                    <span className="content"><a href={imgInfo.source} target="_blank">{imgInfo.source}</a></span>
+                </div>
+            </div>
         )
     }
 
