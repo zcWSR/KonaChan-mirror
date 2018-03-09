@@ -1,7 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const Config = require('./app/Config');
 
 module.exports = {
   entry: {
@@ -33,9 +34,7 @@ module.exports = {
       warnings: false
     }),
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
+        KONACHAN_HOST: JSON.stringify(Config.KONACHAN_HOST.develop)
     }),
     new webpack.optimize.CommonsChunkPlugin({
         names: ['vendor'], //manifest：不再重复打包vendor.js影响速度

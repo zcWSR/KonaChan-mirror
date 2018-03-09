@@ -1,15 +1,16 @@
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const Config = require('./app/Config');
 
 module.exports = {
   entry: './app/main.js',
   output: {
     path: path.resolve(__dirname, 'dev'),
-    filename: 'bundle.js',
+    filename: 'bundle.js'
   },
-  devtool: 'source-map',
+  devtool: '#source-map',
   module: {
     rules: [{
       test: /\.(js|jsx)$/,
@@ -25,6 +26,9 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.DefinePlugin({
+        KONACHAN_HOST: JSON.stringify(Config.KONACHAN_HOST.production)
+    }),
     new ExtractTextPlugin('style.css'),
     new HtmlWebpackPlugin({
       template: './index.html'

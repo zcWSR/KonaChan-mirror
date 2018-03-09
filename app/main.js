@@ -6,5 +6,5 @@ ReactDOM.render(
     <Root />,
     document.getElementById('react-content')
 );
-window.onerror = function(){return false;}
+window.onerror = () => false;
 
