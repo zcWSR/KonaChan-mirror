@@ -34,7 +34,7 @@ module.exports = {
       warnings: false
     }),
     new webpack.DefinePlugin({
-        KONACHAN_HOST: JSON.stringify(Config.KONACHAN_HOST.develop)
+        KONACHAN_HOST: JSON.stringify(Config.KONACHAN_HOST.production)
     }),
     new webpack.optimize.CommonsChunkPlugin({
         names: ['vendor'], //manifest：不再重复打包vendor.js影响速度
