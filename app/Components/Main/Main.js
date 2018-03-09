@@ -25,18 +25,23 @@ export class Main extends React.Component{
         })
     }
 
+    onClickTag(tag) {
+        this.setState({ tag });
+    }
+
     render() {
         return (
             <div className="main-wrapper">
                 <Row gutter={8}>
                     <Col span={5} style={{ marginTop: '25px' }}>
-                        <SearchSection 
+                        <SearchSection
+                            tag={this.state.tag}
                             onGetSearchTag={tag => this.onGetSearchTag(tag)} 
                             onSafeSwitchChange={isSafe => this.onSafeSwitchChange(isSafe)} 
                         />
                     </Col>
                     <Col span={19}>
-                        <ImageSection tag={this.state.tag} safe={this.state.safe} />
+                        <ImageSection tag={this.state.tag} safe={this.state.safe} onClickTag={tag => this.onClickTag(tag)}  />
                     </Col>
                 </Row>
             </div>

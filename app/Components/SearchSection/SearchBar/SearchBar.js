@@ -33,6 +33,10 @@ export class SearchBar extends React.Component {
         this.props.onGetResult(value);
     }
 
+    componentWillReceiveProps({ keyword }) {
+        this.setState({ keyword });
+    }
+
     componentDidMount() {
         this.searchObservable
             = new Rx.Subject()
@@ -101,7 +105,7 @@ export class SearchBar extends React.Component {
     render() {
         const placeholder = this.props.placeholder || 'input';
         const defaultValue = this.props.defaultValue || null;
-        let { dataSource } = this.state;
+        let { dataSource, keyword } = this.state;
         const suffix = this.state.loading ? <Spin size="small" /> : <Icon className="search-btn" type="search" onClick={() => this.onGetResult(this.state.keyword)} />;
 
         return (
@@ -109,8 +113,9 @@ export class SearchBar extends React.Component {
                 <AutoComplete
                     size="large"
                     style={{ width: '100%' }}
-                    dataSource={this.state.dataSource}
+                    dataSource={dataSource}
                     onSelect={value => this.onGetResult(value)}
+                    value={keyword}
                     onSearch={value => this.onSearch(value)}
                     placeholder={placeholder}
                     defaultValue={defaultValue}

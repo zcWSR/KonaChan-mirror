@@ -26,7 +26,7 @@ export class Loading extends React.Component {
                                 <Button type="primary" onClick={() => this.props.onReload()}>出现错误，滚动或点击重试</Button>
                             </div>):
                 <div className="loading">
-                    <Button type="primary" onClick={() => this.props.onReload()}>加载</Button>
+                    <Button type="primary" onClick={() => this.props.loadMore()}>加载</Button>
                 </div>
             }
             </Row>
@@ -39,7 +39,7 @@ export class ImageSection extends React.Component {
         super();
         this.state = {
             tag: '',
-            safe: false,
+            safe: true,
             page: 1,
             loading: 0, // 1: loading, 0: loaded, -1: no more, -2: load failed
             col0: List([]),
@@ -50,14 +50,25 @@ export class ImageSection extends React.Component {
         this.colsHeight = [0, 0, 0, 0];
         this.imgListObservable = null;
         this.imgListSubscriber = null;
+        this.scrollObserver = new IntersectionObserver(() => {
+            if (this.state.loading === -2) {
+                this.onReload();
+            }
+            if (this.state.loading === 0) {
+                this.loadMore()
+            }
+            
+        });
     }
 
     loadMore() {
         if (this.state.loading !== -1) {
-            this.setState(prevState => ({
-                page: ++prevState.page,
-            }));
-            this.imgListObservable.next({ tag: this.state.tag, page: this.state.page });
+            const { tag, page } = this.state;
+            this.setState({
+                page: page + 1,
+            }, () => {
+                this.imgListObservable.next({ tag, page: page + 1 });
+            });
         }
     }
 
@@ -97,6 +108,7 @@ export class ImageSection extends React.Component {
 
         const { tag, page } = this.state;
         this.imgListObservable.next({ tag, page });
+        this.scrollObserver.observe(this.refs.sentinels);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -126,14 +138,7 @@ export class ImageSection extends React.Component {
         for(let imgInfo of imgList) {
             const index = this.indexOfSmallest(this.colsHeight);
             this.colsHeight[index] += imgInfo.preview_height / imgInfo.preview_width;
-
             cols[`col${index}`] = cols[`col${index}`].push(imgInfo);
-            console.log(imgInfo);
-            // this.setState(prevState => ({
-            //     [`col_${index}_imgs`]: prevState[`col_${index}_imgs`]
-            //         .concat(<SimpleImgCard key={imgInfo.id} info={imgInfo} group={index} />),
-            //     colHeight: colHeight
-            // }));
         }
         this.setState(prev => Object.assign(prev, cols));
     }
@@ -148,7 +153,7 @@ export class ImageSection extends React.Component {
 
     renderCol(list) {
         return list.toJS().map((item, index) => (
-            <SimpleImgCard key={`${item.id}`} info={item} group={index} />
+            <SimpleImgCard key={`${item.id}`} info={item} group={index} onClickTag={tag => this.props.onClickTag(tag)} />
         ));
     }
 
@@ -157,13 +162,14 @@ export class ImageSection extends React.Component {
         const { col0, col1, col2, col3, loading } = this.state;
         return (
             <div ref="content">
-                <Row gutter={15} className="images-wrapper">
+                <Row gutter={15} className="images-wrapper" ref="img_wrapper">
                     <Col span={6}>{this.renderCol(col0)}</Col>
                     <Col span={6}>{this.renderCol(col1)}</Col>
                     <Col span={6}>{this.renderCol(col2)}</Col>
                     <Col span={6}>{this.renderCol(col3)}</Col>
                 </Row>
-                <Loading state={loading} onReload={() => this.onReload()} />
+                <div className="sentinels" ref="sentinels" />
+                <Loading state={loading} onReload={() => this.onReload()} loadMore={() => this.loadMore()} />
             </div>
         )
     }

@@ -1,6 +1,5 @@
 import * as Rx from 'rxjs/Rx'
 export const host = KONACHAN_HOST;
-console.log(host);
 
 export class JSONP {
     // 获取当前时间戳

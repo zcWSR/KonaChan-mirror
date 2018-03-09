@@ -43,13 +43,13 @@ export class Image extends React.Component {
     }
 }
 
-const TagList = ({tagString}) => (
+const TagList = ({tagString, onClickTag}) => (
     <div className="tag-section">
         <ul>
         {
             tagString.split(' ')
                 .map((tag, i) => 
-                    <li key={i}><div className="tag-section-item">{tag}</div></li>
+                    <li key={i} onClick={() => onClickTag(tag)}><div className="tag-section-item">{tag}</div></li>
                     )
         }
         </ul>
@@ -75,6 +75,7 @@ export class SimpleImgCard extends React.Component {
 
     initPopover() {
         let imgInfo = this.props.info
+        let onClickTag = this.props.onClickTag;
         
         // switch(this.props.group) {
         //     case '0': 
@@ -87,7 +88,7 @@ export class SimpleImgCard extends React.Component {
             <div className="popover-content">
                 <div className="item" key="0">
                     <span className="label">tags: </span>
-                    <span className="content"><TagList tagString={imgInfo.tags} /></span>
+                    <span className="content"><TagList tagString={imgInfo.tags} onClickTag={tag => onClickTag(tag)} /></span>
                 </div>
                 <div className="item" key="1">
                     <span className="label">created at: </span>
